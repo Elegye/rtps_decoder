@@ -1,1 +1,4 @@
 __pycache__/rtps.cpython-311.pyc
+*.pyc
+build/
+.DS_Store

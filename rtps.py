@@ -155,8 +155,12 @@ class Rtps(KaitaiStruct):
             self.reader_id = Rtps.EntityId(self._io, self, self._root)
             self.writer_id = Rtps.EntityId(self._io, self, self._root)
             self.writer_sn = Rtps.SequenceNumber(self._io, self, self._root)
-            self.inline_qos = Rtps.ParameterList(self._io, self, self._root)
-            self.serialized_payload = Rtps.SerializedPayload(self._io, self, self._root)
+            if (self._parent.header.flags & 2) == 0:
+                self.inline_qos = Rtps.ParameterList(self._io, self, self._root)
+
+            if  (((self._parent.header.flags & 4) == 0) or ((self._parent.header.flags & 8) == 0)) :
+                self.serialized_payload = Rtps.SerializedPayload(self._io, self, self._root)
+
 
         def _read_be(self):
             self.extra_flags = self._io.read_s2be()
@@ -164,8 +168,12 @@ class Rtps(KaitaiStruct):
             self.reader_id = Rtps.EntityId(self._io, self, self._root)
             self.writer_id = Rtps.EntityId(self._io, self, self._root)
             self.writer_sn = Rtps.SequenceNumber(self._io, self, self._root)
-            self.inline_qos = Rtps.ParameterList(self._io, self, self._root)
-            self.serialized_payload = Rtps.SerializedPayload(self._io, self, self._root)
+            if (self._parent.header.flags & 2) == 0:
+                self.inline_qos = Rtps.ParameterList(self._io, self, self._root)
+
+            if  (((self._parent.header.flags & 4) == 0) or ((self._parent.header.flags & 8) == 0)) :
+                self.serialized_payload = Rtps.SerializedPayload(self._io, self, self._root)
+
 
 
     class InfoReply(KaitaiStruct):
@@ -180,6 +188,17 @@ class Rtps(KaitaiStruct):
             if (self._parent.header.flags & 2) == 1:
                 self.multicast_locator_list = Rtps.LocatorList(self._io, self, self._root)
 
+
+
+    class BitmapT(KaitaiStruct):
+        def __init__(self, _io, _parent=None, _root=None):
+            self._io = _io
+            self._parent = _parent
+            self._root = _root if _root else self
+            self._read()
+
+        def _read(self):
+            self.value = self._io.read_s4le()
 
 
     class SerializedPayloadHeader(KaitaiStruct):
@@ -327,6 +346,8 @@ class Rtps(KaitaiStruct):
             _on = self.header.submessage_id
             if _on == Rtps.SubmessageId.info_src:
                 self.payload = Rtps.InfoSource(self._io, self, self._root)
+            elif _on == Rtps.SubmessageId.acknack:
+                self.payload = Rtps.Acknack(self._io, self, self._root)
             elif _on == Rtps.SubmessageId.info_ts:
                 self.payload = Rtps.InfoTimestamp(self._io, self, self._root)
             elif _on == Rtps.SubmessageId.info_reply:
@@ -444,7 +465,10 @@ class Rtps(KaitaiStruct):
         def _read(self):
             self.bitmap_base = Rtps.SequenceNumber(self._io, self, self._root)
             self.numbits = self._io.read_u4le()
-            self.bitmap = self._io.read_bytes(self.numbits)
+            self.bitmap = []
+            for i in range((self.numbits + 31) // 32):
+                self.bitmap.append(Rtps.BitmapT(self._io, self, self._root))
+
 
 
     class Heartbeat(KaitaiStruct):

@@ -2,6 +2,7 @@ meta:
     id: rtps
     title: RTPS
     endian: le
+    tags: 2.3
 doc: |
   The RTPS protocol provides DDS interroperability wire protocol.
 seq:
@@ -56,6 +57,10 @@ types:
         size: 4
       - id: low
         size: 4
+  bitmap_t:
+    seq:
+      - id: value
+        type: s4
   sequence_number_set:
     seq:
       - id: bitmap_base
@@ -63,7 +68,9 @@ types:
       - id: numbits
         type: u4
       - id: bitmap
-        size: numbits
+        type: bitmap_t
+        repeat: expr
+        repeat-expr: ((numbits+31)/32)
   count:
     seq:
       - id: value
@@ -152,6 +159,7 @@ types:
         doc: see 9.4.5.3.2. This protocol version should set all to zero.
       - id: octets_to_inline_qos
         type: u2
+        doc: 9.4.5.3.2
       - id: reader_id
         type: entity_id
       - id: writer_id
@@ -160,11 +168,11 @@ types:
         type: sequence_number
       - id: inline_qos
         type: parameter_list
-        # if: (_parent.header.flags & 0x02) == 0x1
+        if: ((_parent.header.flags & 0x02) == 0)
         doc: only if Q == 1 means only if QosFlag is set
       - id: serialized_payload
         type: serialized_payload
-        # if: ((_parent.header.flags & 0x04) == 0x1 or (_parent.header.flags & 0x08) == 0x1)
+        if: (((_parent.header.flags & 0x04) == 0) or ((_parent.header.flags & 0x08) == 0))
         doc: only if D==1 or K==1 means only if DataFlag or KeyFlag is set. see 9.4.5.3.1
   gap:
     seq:
@@ -248,6 +256,7 @@ types:
             'submessage_id::info_dst': info_destination
             'submessage_id::info_reply': info_reply
             'submessage_id::pad': pad
+            'submessage_id::acknack': acknack
 
 enums:
   submessage_id:

@@ -1,0 +1,396 @@
+digraph {
+	rankdir=LR;
+	node [shape=plaintext];
+	subgraph cluster__rtps {
+		label="Rtps";
+		graph[style=dotted];
+
+		rtps__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+			<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+			<TR><TD PORT="header_pos">0</TD><TD PORT="header_size">20</TD><TD>RtpsHeader</TD><TD PORT="header_type">header</TD></TR>
+			<TR><TD PORT="submessage_pos">20</TD><TD PORT="submessage_size">...</TD><TD>RtpsSubmessage</TD><TD PORT="submessage_type">submessage</TD></TR>
+			<TR><TD COLSPAN="4" PORT="submessage__repeat">repeat to end of stream</TD></TR>
+		</TABLE>>];
+		subgraph cluster__info_source {
+			label="Rtps::InfoSource";
+			graph[style=dotted];
+
+			info_source__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="unused_pos">0</TD><TD PORT="unused_size">4</TD><TD>u4le</TD><TD PORT="unused_type">unused</TD></TR>
+				<TR><TD PORT="protocol_version_pos">4</TD><TD PORT="protocol_version_size">2</TD><TD>ProtocolVersion</TD><TD PORT="protocol_version_type">protocol_version</TD></TR>
+				<TR><TD PORT="vendor_id_pos">6</TD><TD PORT="vendor_id_size">2</TD><TD>VendorId</TD><TD PORT="vendor_id_type">vendor_id</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__count {
+			label="Rtps::Count";
+			graph[style=dotted];
+
+			count__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="value_pos">0</TD><TD PORT="value_size">4</TD><TD>s4le</TD><TD PORT="value_type">value</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__fragment_number {
+			label="Rtps::FragmentNumber";
+			graph[style=dotted];
+
+			fragment_number__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="value_pos">0</TD><TD PORT="value_size">4</TD><TD>u4le</TD><TD PORT="value_type">value</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__timestamp {
+			label="Rtps::Timestamp";
+			graph[style=dotted];
+
+			timestamp__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="seconds_pos">0</TD><TD PORT="seconds_size">4</TD><TD>u4le</TD><TD PORT="seconds_type">seconds</TD></TR>
+				<TR><TD PORT="fraction_pos">4</TD><TD PORT="fraction_size">4</TD><TD>u4le</TD><TD PORT="fraction_type">fraction</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__nack_frag {
+			label="Rtps::NackFrag";
+			graph[style=dotted];
+
+			nack_frag__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="reader_id_pos">0</TD><TD PORT="reader_id_size">4</TD><TD>EntityId</TD><TD PORT="reader_id_type">reader_id</TD></TR>
+				<TR><TD PORT="writer_id_pos">4</TD><TD PORT="writer_id_size">4</TD><TD>EntityId</TD><TD PORT="writer_id_type">writer_id</TD></TR>
+				<TR><TD PORT="writer_sn_pos">8</TD><TD PORT="writer_sn_size">8</TD><TD>SequenceNumber</TD><TD PORT="writer_sn_type">writer_sn</TD></TR>
+				<TR><TD PORT="fragment_number_set_pos">16</TD><TD PORT="fragment_number_set_size">...</TD><TD>FragmentNumberSet</TD><TD PORT="fragment_number_set_type">fragment_number_set</TD></TR>
+				<TR><TD PORT="count_pos">...</TD><TD PORT="count_size">4</TD><TD>Count</TD><TD PORT="count_type">count</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__vendor_id {
+			label="Rtps::VendorId";
+			graph[style=dotted];
+
+			vendor_id__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="value_pos">0</TD><TD PORT="value_size">2</TD><TD></TD><TD PORT="value_type">value</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__fragment_number_set {
+			label="Rtps::FragmentNumberSet";
+			graph[style=dotted];
+
+			fragment_number_set__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="bitmap_base_pos">0</TD><TD PORT="bitmap_base_size">4</TD><TD>FragmentNumber</TD><TD PORT="bitmap_base_type">bitmap_base</TD></TR>
+				<TR><TD PORT="numbits_pos">4</TD><TD PORT="numbits_size">4</TD><TD>u4le</TD><TD PORT="numbits_type">numbits</TD></TR>
+				<TR><TD PORT="bitmap_pos">8</TD><TD PORT="bitmap_size">numbits</TD><TD>FragmentNumber</TD><TD PORT="bitmap_type">bitmap</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__data {
+			label="Rtps::Data";
+			graph[style=dotted];
+
+			data__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="extra_flags_pos">0</TD><TD PORT="extra_flags_size">2</TD><TD>s2</TD><TD PORT="extra_flags_type">extra_flags</TD></TR>
+				<TR><TD PORT="octets_to_inline_qos_pos">2</TD><TD PORT="octets_to_inline_qos_size">2</TD><TD>u2</TD><TD PORT="octets_to_inline_qos_type">octets_to_inline_qos</TD></TR>
+				<TR><TD PORT="reader_id_pos">4</TD><TD PORT="reader_id_size">4</TD><TD>EntityId</TD><TD PORT="reader_id_type">reader_id</TD></TR>
+				<TR><TD PORT="writer_id_pos">8</TD><TD PORT="writer_id_size">4</TD><TD>EntityId</TD><TD PORT="writer_id_type">writer_id</TD></TR>
+				<TR><TD PORT="writer_sn_pos">12</TD><TD PORT="writer_sn_size">8</TD><TD>SequenceNumber</TD><TD PORT="writer_sn_type">writer_sn</TD></TR>
+				<TR><TD PORT="inline_qos_pos">20</TD><TD PORT="inline_qos_size">...</TD><TD>ParameterList</TD><TD PORT="inline_qos_type">inline_qos</TD></TR>
+				<TR><TD PORT="serialized_payload_pos">...</TD><TD PORT="serialized_payload_size">...</TD><TD>SerializedPayload</TD><TD PORT="serialized_payload_type">serialized_payload</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__info_reply {
+			label="Rtps::InfoReply";
+			graph[style=dotted];
+
+			info_reply__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="unicast_locator_list_pos">0</TD><TD PORT="unicast_locator_list_size">24</TD><TD>LocatorList</TD><TD PORT="unicast_locator_list_type">unicast_locator_list</TD></TR>
+				<TR><TD PORT="multicast_locator_list_pos">24</TD><TD PORT="multicast_locator_list_size">24</TD><TD>LocatorList</TD><TD PORT="multicast_locator_list_type">multicast_locator_list</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__serialized_payload_header {
+			label="Rtps::SerializedPayloadHeader";
+			graph[style=dotted];
+
+			serialized_payload_header__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="representation_identifier_pos">0</TD><TD PORT="representation_identifier_size">2</TD><TD>s2le</TD><TD PORT="representation_identifier_type">representation_identifier</TD></TR>
+				<TR><TD PORT="representation_options_pos">2</TD><TD PORT="representation_options_size">2</TD><TD>s2le</TD><TD PORT="representation_options_type">representation_options</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__parameter_id {
+			label="Rtps::ParameterId";
+			graph[style=dotted];
+
+			parameter_id__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="id_pos">0</TD><TD PORT="id_size">2</TD><TD>s2le</TD><TD PORT="id_type">id</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__pad {
+			label="Rtps::Pad";
+			graph[style=dotted];
+
+			pad__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__info_timestamp {
+			label="Rtps::InfoTimestamp";
+			graph[style=dotted];
+
+			info_timestamp__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="timestamp_pos">0</TD><TD PORT="timestamp_size">8</TD><TD>Timestamp</TD><TD PORT="timestamp_type">timestamp</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__serialized_payload {
+			label="Rtps::SerializedPayload";
+			graph[style=dotted];
+
+			serialized_payload__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="header_pos">0</TD><TD PORT="header_size">4</TD><TD>SerializedPayloadHeader</TD><TD PORT="header_type">header</TD></TR>
+				<TR><TD PORT="payload_pos">4</TD><TD PORT="payload_size">(_parent._parent.header.octets_to_next_header - 28)</TD><TD></TD><TD PORT="payload_type">payload</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__guid_prefix {
+			label="Rtps::GuidPrefix";
+			graph[style=dotted];
+
+			guid_prefix__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="host_id_pos">0</TD><TD PORT="host_id_size">4</TD><TD></TD><TD PORT="host_id_type">host_id</TD></TR>
+				<TR><TD PORT="app_id_pos">4</TD><TD PORT="app_id_size">4</TD><TD></TD><TD PORT="app_id_type">app_id</TD></TR>
+				<TR><TD PORT="instance_id_pos">8</TD><TD PORT="instance_id_size">4</TD><TD></TD><TD PORT="instance_id_type">instance_id</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__entity_id {
+			label="Rtps::EntityId";
+			graph[style=dotted];
+
+			entity_id__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="key_pos">0</TD><TD PORT="key_size">3</TD><TD></TD><TD PORT="key_type">key</TD></TR>
+				<TR><TD PORT="kind_pos">3</TD><TD PORT="kind_size">1</TD><TD></TD><TD PORT="kind_type">kind</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__acknack {
+			label="Rtps::Acknack";
+			graph[style=dotted];
+
+			acknack__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="reader_id_pos">0</TD><TD PORT="reader_id_size">4</TD><TD>EntityId</TD><TD PORT="reader_id_type">reader_id</TD></TR>
+				<TR><TD PORT="writer_id_pos">4</TD><TD PORT="writer_id_size">4</TD><TD>EntityId</TD><TD PORT="writer_id_type">writer_id</TD></TR>
+				<TR><TD PORT="reader_sn_state_pos">8</TD><TD PORT="reader_sn_state_size">...</TD><TD>SequenceNumberSet</TD><TD PORT="reader_sn_state_type">reader_sn_state</TD></TR>
+				<TR><TD PORT="count_pos">...</TD><TD PORT="count_size">4</TD><TD>Count</TD><TD PORT="count_type">count</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__locator_list {
+			label="Rtps::LocatorList";
+			graph[style=dotted];
+
+			locator_list__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="value_pos">0</TD><TD PORT="value_size">24</TD><TD>Locator</TD><TD PORT="value_type">value</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__gap {
+			label="Rtps::Gap";
+			graph[style=dotted];
+
+			gap__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="reader_id_pos">0</TD><TD PORT="reader_id_size">4</TD><TD>EntityId</TD><TD PORT="reader_id_type">reader_id</TD></TR>
+				<TR><TD PORT="writer_id_pos">4</TD><TD PORT="writer_id_size">4</TD><TD>EntityId</TD><TD PORT="writer_id_type">writer_id</TD></TR>
+				<TR><TD PORT="gap_start_pos">8</TD><TD PORT="gap_start_size">8</TD><TD>SequenceNumber</TD><TD PORT="gap_start_type">gap_start</TD></TR>
+				<TR><TD PORT="gap_list_pos">16</TD><TD PORT="gap_list_size">...</TD><TD>SequenceNumberSet</TD><TD PORT="gap_list_type">gap_list</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__info_destination {
+			label="Rtps::InfoDestination";
+			graph[style=dotted];
+
+			info_destination__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="guid_prefix_pos">0</TD><TD PORT="guid_prefix_size">12</TD><TD>GuidPrefix</TD><TD PORT="guid_prefix_type">guid_prefix</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__rtps_submessage {
+			label="Rtps::RtpsSubmessage";
+			graph[style=dotted];
+
+			rtps_submessage__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="header_pos">0</TD><TD PORT="header_size">4</TD><TD>SubmessageHeader</TD><TD PORT="header_type">header</TD></TR>
+				<TR><TD PORT="payload_pos">4</TD><TD PORT="payload_size">...</TD><TD>switch (header.submessage_id)</TD><TD PORT="payload_type">payload</TD></TR>
+			</TABLE>>];
+rtps_submessage__seq_payload_switch [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+	<TR><TD BGCOLOR="#F0F2E4">case</TD><TD BGCOLOR="#F0F2E4">type</TD></TR>
+	<TR><TD>:submessage_id_info_src</TD><TD PORT="case0">InfoSource</TD></TR>
+	<TR><TD>:submessage_id_info_ts</TD><TD PORT="case1">InfoTimestamp</TD></TR>
+	<TR><TD>:submessage_id_info_reply</TD><TD PORT="case2">InfoReply</TD></TR>
+	<TR><TD>:submessage_id_gap</TD><TD PORT="case3">Gap</TD></TR>
+	<TR><TD>:submessage_id_pad</TD><TD PORT="case4">Pad</TD></TR>
+	<TR><TD>:submessage_id_info_dst</TD><TD PORT="case5">InfoDestination</TD></TR>
+	<TR><TD>:submessage_id_data</TD><TD PORT="case6">Data</TD></TR>
+	<TR><TD>:submessage_id_heartbeat</TD><TD PORT="case7">Heartbeat</TD></TR>
+</TABLE>>];
+		}
+		subgraph cluster__app_id {
+			label="Rtps::AppId";
+			graph[style=dotted];
+
+			app_id__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="instance_id_pos">0</TD><TD PORT="instance_id_size">3</TD><TD></TD><TD PORT="instance_id_type">instance_id</TD></TR>
+				<TR><TD PORT="app_kind_pos">3</TD><TD PORT="app_kind_size">1</TD><TD></TD><TD PORT="app_kind_type">app_kind</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__submessage_header {
+			label="Rtps::SubmessageHeader";
+			graph[style=dotted];
+
+			submessage_header__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="submessage_id_pos">0</TD><TD PORT="submessage_id_size">1</TD><TD>s1→SubmessageId</TD><TD PORT="submessage_id_type">submessage_id</TD></TR>
+				<TR><TD PORT="flags_pos">1</TD><TD PORT="flags_size">1</TD><TD>u1</TD><TD PORT="flags_type">flags</TD></TR>
+				<TR><TD PORT="octets_to_next_header_pos">2</TD><TD PORT="octets_to_next_header_size">2</TD><TD>u2le</TD><TD PORT="octets_to_next_header_type">octets_to_next_header</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__locator {
+			label="Rtps::Locator";
+			graph[style=dotted];
+
+			locator__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="kind_pos">0</TD><TD PORT="kind_size">4</TD><TD>s4le</TD><TD PORT="kind_type">kind</TD></TR>
+				<TR><TD PORT="port_pos">4</TD><TD PORT="port_size">4</TD><TD>u4le</TD><TD PORT="port_type">port</TD></TR>
+				<TR><TD PORT="address_pos">8</TD><TD PORT="address_size">16</TD><TD></TD><TD PORT="address_type">address</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__sequence_number {
+			label="Rtps::SequenceNumber";
+			graph[style=dotted];
+
+			sequence_number__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="high_pos">0</TD><TD PORT="high_size">4</TD><TD></TD><TD PORT="high_type">high</TD></TR>
+				<TR><TD PORT="low_pos">4</TD><TD PORT="low_size">4</TD><TD></TD><TD PORT="low_type">low</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__rtps_header {
+			label="Rtps::RtpsHeader";
+			graph[style=dotted];
+
+			rtps_header__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="magic_pos">0</TD><TD PORT="magic_size">4</TD><TD></TD><TD PORT="magic_type">magic</TD></TR>
+				<TR><TD PORT="protocol_version_pos">4</TD><TD PORT="protocol_version_size">2</TD><TD>ProtocolVersion</TD><TD PORT="protocol_version_type">protocol_version</TD></TR>
+				<TR><TD PORT="vendor_id_pos">6</TD><TD PORT="vendor_id_size">2</TD><TD>VendorId</TD><TD PORT="vendor_id_type">vendor_id</TD></TR>
+				<TR><TD PORT="guid_prefix_pos">8</TD><TD PORT="guid_prefix_size">12</TD><TD>GuidPrefix</TD><TD PORT="guid_prefix_type">guid_prefix</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__parameter_list {
+			label="Rtps::ParameterList";
+			graph[style=dotted];
+
+			parameter_list__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="parameter_id_pos">0</TD><TD PORT="parameter_id_size">2</TD><TD>ParameterId</TD><TD PORT="parameter_id_type">parameter_id</TD></TR>
+				<TR><TD PORT="length_pos">2</TD><TD PORT="length_size">2</TD><TD>s2le</TD><TD PORT="length_type">length</TD></TR>
+				<TR><TD PORT="value_pos">4</TD><TD PORT="value_size">length</TD><TD></TD><TD PORT="value_type">value</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__protocol_version {
+			label="Rtps::ProtocolVersion";
+			graph[style=dotted];
+
+			protocol_version__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="major_pos">0</TD><TD PORT="major_size">1</TD><TD>u1</TD><TD PORT="major_type">major</TD></TR>
+				<TR><TD PORT="minor_pos">1</TD><TD PORT="minor_size">1</TD><TD>u1</TD><TD PORT="minor_type">minor</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__sequence_number_set {
+			label="Rtps::SequenceNumberSet";
+			graph[style=dotted];
+
+			sequence_number_set__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="bitmap_base_pos">0</TD><TD PORT="bitmap_base_size">8</TD><TD>SequenceNumber</TD><TD PORT="bitmap_base_type">bitmap_base</TD></TR>
+				<TR><TD PORT="numbits_pos">8</TD><TD PORT="numbits_size">4</TD><TD>u4le</TD><TD PORT="numbits_type">numbits</TD></TR>
+				<TR><TD PORT="bitmap_pos">12</TD><TD PORT="bitmap_size">numbits</TD><TD></TD><TD PORT="bitmap_type">bitmap</TD></TR>
+			</TABLE>>];
+		}
+		subgraph cluster__heartbeat {
+			label="Rtps::Heartbeat";
+			graph[style=dotted];
+
+			heartbeat__seq [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+				<TR><TD BGCOLOR="#E0FFE0">pos</TD><TD BGCOLOR="#E0FFE0">size</TD><TD BGCOLOR="#E0FFE0">type</TD><TD BGCOLOR="#E0FFE0">id</TD></TR>
+				<TR><TD PORT="reader_id_pos">0</TD><TD PORT="reader_id_size">4</TD><TD>EntityId</TD><TD PORT="reader_id_type">reader_id</TD></TR>
+				<TR><TD PORT="writer_id_pos">4</TD><TD PORT="writer_id_size">4</TD><TD>EntityId</TD><TD PORT="writer_id_type">writer_id</TD></TR>
+				<TR><TD PORT="first_sn_pos">8</TD><TD PORT="first_sn_size">8</TD><TD>SequenceNumber</TD><TD PORT="first_sn_type">first_sn</TD></TR>
+				<TR><TD PORT="last_sn_pos">16</TD><TD PORT="last_sn_size">8</TD><TD>SequenceNumber</TD><TD PORT="last_sn_type">last_sn</TD></TR>
+				<TR><TD PORT="count_pos">24</TD><TD PORT="count_size">4</TD><TD>Count</TD><TD PORT="count_type">count</TD></TR>
+			</TABLE>>];
+		}
+	}
+	rtps__seq:header_type -> rtps_header__seq [style=bold];
+	rtps__seq:submessage_type -> rtps_submessage__seq [style=bold];
+	info_source__seq:protocol_version_type -> protocol_version__seq [style=bold];
+	info_source__seq:vendor_id_type -> vendor_id__seq [style=bold];
+	nack_frag__seq:reader_id_type -> entity_id__seq [style=bold];
+	nack_frag__seq:writer_id_type -> entity_id__seq [style=bold];
+	nack_frag__seq:writer_sn_type -> sequence_number__seq [style=bold];
+	nack_frag__seq:fragment_number_set_type -> fragment_number_set__seq [style=bold];
+	nack_frag__seq:count_type -> count__seq [style=bold];
+	fragment_number_set__seq:bitmap_base_type -> fragment_number__seq [style=bold];
+	fragment_number_set__seq:numbits_type -> fragment_number_set__seq:bitmap_size [color="#404040"];
+	fragment_number_set__seq:bitmap_type -> fragment_number__seq [style=bold];
+	data__seq:reader_id_type -> entity_id__seq [style=bold];
+	data__seq:writer_id_type -> entity_id__seq [style=bold];
+	data__seq:writer_sn_type -> sequence_number__seq [style=bold];
+	data__seq:inline_qos_type -> parameter_list__seq [style=bold];
+	data__seq:serialized_payload_type -> serialized_payload__seq [style=bold];
+	info_reply__seq:unicast_locator_list_type -> locator_list__seq [style=bold];
+	info_reply__seq:multicast_locator_list_type -> locator_list__seq [style=bold];
+	info_timestamp__seq:timestamp_type -> timestamp__seq [style=bold];
+	serialized_payload__seq:header_type -> serialized_payload_header__seq [style=bold];
+	submessage_header__seq:octets_to_next_header_type -> serialized_payload__seq:payload_size [color="#404040"];
+	acknack__seq:reader_id_type -> entity_id__seq [style=bold];
+	acknack__seq:writer_id_type -> entity_id__seq [style=bold];
+	acknack__seq:reader_sn_state_type -> sequence_number_set__seq [style=bold];
+	acknack__seq:count_type -> count__seq [style=bold];
+	locator_list__seq:value_type -> locator__seq [style=bold];
+	gap__seq:reader_id_type -> entity_id__seq [style=bold];
+	gap__seq:writer_id_type -> entity_id__seq [style=bold];
+	gap__seq:gap_start_type -> sequence_number__seq [style=bold];
+	gap__seq:gap_list_type -> sequence_number_set__seq [style=bold];
+	info_destination__seq:guid_prefix_type -> guid_prefix__seq [style=bold];
+	rtps_submessage__seq:header_type -> submessage_header__seq [style=bold];
+	rtps_submessage__seq:payload_type -> rtps_submessage__seq_payload_switch [style=bold];
+	rtps_submessage__seq_payload_switch:case0 -> info_source__seq [style=bold];
+	rtps_submessage__seq_payload_switch:case1 -> info_timestamp__seq [style=bold];
+	rtps_submessage__seq_payload_switch:case2 -> info_reply__seq [style=bold];
+	rtps_submessage__seq_payload_switch:case3 -> gap__seq [style=bold];
+	rtps_submessage__seq_payload_switch:case4 -> pad__seq [style=bold];
+	rtps_submessage__seq_payload_switch:case5 -> info_destination__seq [style=bold];
+	rtps_submessage__seq_payload_switch:case6 -> data__seq [style=bold];
+	rtps_submessage__seq_payload_switch:case7 -> heartbeat__seq [style=bold];
+	submessage_header__seq:submessage_id_type -> rtps_submessage__seq:payload_type [color="#404040"];
+	rtps_header__seq:protocol_version_type -> protocol_version__seq [style=bold];
+	rtps_header__seq:vendor_id_type -> vendor_id__seq [style=bold];
+	rtps_header__seq:guid_prefix_type -> guid_prefix__seq [style=bold];
+	parameter_list__seq:parameter_id_type -> parameter_id__seq [style=bold];
+	parameter_list__seq:length_type -> parameter_list__seq:value_size [color="#404040"];
+	sequence_number_set__seq:bitmap_base_type -> sequence_number__seq [style=bold];
+	sequence_number_set__seq:numbits_type -> sequence_number_set__seq:bitmap_size [color="#404040"];
+	heartbeat__seq:reader_id_type -> entity_id__seq [style=bold];
+	heartbeat__seq:writer_id_type -> entity_id__seq [style=bold];
+	heartbeat__seq:first_sn_type -> sequence_number__seq [style=bold];
+	heartbeat__seq:last_sn_type -> sequence_number__seq [style=bold];
+	heartbeat__seq:count_type -> count__seq [style=bold];
+}
